@@ -128,7 +128,7 @@ io.on("connection", (socket) => {
         }
         io.emit('userSaved', data);
 
-        portMap.write("s" + espDelimiter, (err) => {
+        portMap.write("f" + espDelimiter, (err) => {
           if (err) {
             console.error("Error writing to ESP:", err);
           } else {

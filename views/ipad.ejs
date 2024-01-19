@@ -160,12 +160,15 @@
     const form = document.getElementById("form-container");
     const socket = io();
     socket.on("connection");
-
+const isPeddling=false;
     function sendUsernames() {
       const userName = document.getElementById("username1").value;
       console.log("button clicked", userName);
       location.reload()
       socket.emit("saveNamesAndInitializeWinner", userName);
+
+      
+
       //   const one = document.getElementById("username1").value;
       //   socket.emit("saveNamesAndInitializeWinner", [one]);
       //   socket.on("userSaved", (e) => {

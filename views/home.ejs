@@ -244,7 +244,7 @@
       }
       .congrats-content {
         position: absolute;
-        top: 50%;
+        top: 45%;
         left: 50%;
         transform: translate(-50%, -50%);
         text-align: center;
@@ -252,17 +252,20 @@
       }
 
       .congrats-content h1 {
-        font-size: 3rem;
-        margin-bottom: 10px;
+        font-size: 5rem;
+        font-family: "Inter";
+        margin-bottom: 8px;
       }
 
       .congrats-content h2 {
-        font-size: 2rem;
+        font-size: 3rem;
+        font-family: "Inter";
       }
 
       .congrats-content p {
-        font-size: 1.5rem;
+        font-size: 3rem;
         margin-top: 10px;
+        font-family: "Inter";
       }
 
       .logo2 {
@@ -285,6 +288,17 @@
         left: 0;
         z-index: 1000;
       }
+      /* .congrats-content img{
+        width: 250px;
+        height: 300px;
+      }
+      .cycle{
+        width: 100%;
+        height: 100%;
+
+
+
+      } */
     </style>
   </head>
   <body>
@@ -339,7 +353,7 @@
     <section id="winner" style="display: none">
       <div class="gif">
         <!-- <img src="../assets/confit.mp4" id="gif" alt="" /> -->
-        <img src="../assets/confiti.gif" id="gif" alt="" />
+        <img src="../assets/giphy.gif" id="gif" alt="" />
 
         <!-- <video src="../assets/newconff.gif" muted autoplay id="gif"></video> -->
       </div>
@@ -349,6 +363,10 @@
 
       <!-- <img src="../assets/bg_congrats.jpg" id="bg" alt="" /> -->
       <div class="congrats-content">
+        <!-- <div class="cycle">
+         
+          <img src="../assets/cycle.png" alt="" />
+        </div> -->
         <h1>Congratulations</h1>
         <h2 id="winnername" class="animate__animated animate__bounceInUp">
           Player Name
@@ -363,21 +381,21 @@
       const video1 = document.getElementById("bg1");
       const secondsToAdd = 1;
       var winnerName;
+      var isStarted =false;
 
       const socket = io();
       socket.on("connection");
       document.addEventListener("keydown", function (event) {
-    // Check if the pressed key is "f"
-    if (event.shiftKey && event.key === 'F') {
-      // Emit the "command" event to the server with the "f" key
-      socket.emit("command", { key: 'Shift + F' });
-      
-      // Log that the "f" key was pressed (optional)
-      console.log('Sent letter "f" to ESP');
-    }
-    location.reload()
-  
-  });
+        // Check if the pressed key is "f"
+        if (event.shiftKey && event.key === "F") {
+          // Emit the "command" event to the server with the "f" key
+          socket.emit("command", { key: "Shift + F" });
+
+          // Log that the "f" key was pressed (optional)
+          console.log('Sent letter "f" to ESP');
+        }
+        location.reload();
+      });
 
       const form = document.getElementById("form-container");
       const bottels = document.getElementById("bottel");
@@ -388,6 +406,7 @@
       }
 
       socket.on("userSaved", (e) => {
+        isStarted = true;
         console.log("userName", e);
         document.getElementById("playerOne").innerHTML = e.userName;
         winnerName = e.userName;
@@ -400,10 +419,15 @@
       // one
 
       socket.on("bgOffset", (data) => {
-        console.log("data",data);
-        video1.currentTime = data;
-        if (data > 11 && !winnerSocket) {
-          navigateToWinnerPage();
+        if (isStarted == true) {
+          console.log("data", data);
+          video1.currentTime = data;
+          if (data > 11 && !winnerSocket) {
+            navigateToWinnerPage();
+          }
+        }
+        else{
+          console.log('not yet started');
         }
       });
 
@@ -432,6 +456,7 @@
         document.getElementById("winner").style.display = "flex";
         document.getElementById("winnername").innerHTML = winnerName;
         socket.emit("winner", winnerName);
+        isStarted = false;
         var timer = 20;
         var cleartime = setInterval(function () {
           timer--;
@@ -439,7 +464,7 @@
             clearInterval(cleartime);
             location.reload();
           }
-        }, 500);
+        }, 1000);
       }
     </script>
   </body>
