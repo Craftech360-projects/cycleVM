@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Greeting Message</title>
+    <script src="/assets/js/socket.io.min.js"></script>
+    <style>
+      * {
+        padding: 0;
+        margin: 0;
+        box-sizing: border-box;
+      }
+      .center {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        text-align: center;
+        width: 100vw;
+        height: 100vh;
+      }
+
+      html {
+        background-color: #001a29;
+      }
+
+      @media screen and (max-width: 1080px), screen and (max-height: 1920px) {
+        .center {
+        }
+
+        .svgmain {
+          padding-right: 0px;
+        }
+      }
+
+      body {
+        overflow: hidden;
+        position: relative;
+        /* background-color: #ededed!important; */
+      }
+      .all-containerrr {
+        position: relative;
+      }
+
+      .left-gg {
+        display: flex;
+        /* background-color: red; */
+        position: absolute;
+        top: 60%;
+        gap: 140px;
+        right: 450px;
+        /* position: absolute; */
+        /* left: 900px; */
+      }
+      .right-gg {
+        display: flex;
+        /* background-color: rgb(64, 255, 0); */
+        position: absolute;
+        gap: 140px;
+        top: 60%;
+        left: 450px;
+      }
+    </style>
+  </head>
+  <!--class="svgmain" style="width: 100vw; height: 100vh" -->
+
+  <body>
+    <div class="all-containerrr">
+      <img src="../assets/images/111.png" alt="" />
+
+      <div class="left-gg">
+        <p
+          style="
+            color: rgb(216, 216, 216);
+            font-size: 40px;
+            font-weight: 600;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+          "
+        >
+          <span id="bg-offset-value">0</span>km
+        </p>
+        <!-- Add two new <p> tags to display calories -->
+        <p
+          style="
+            color: rgb(216, 216, 216);
+            font-size: 40px;
+            font-weight: 600;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+          "
+        >
+          <span id="bg-offset-calories">0</span>
+        </p>
+      </div>
+
+      <div class="right-gg">
+        <p
+          style="
+            color: rgb(216, 216, 216);
+            font-size: 40px;
+            font-weight: 600;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+          "
+        >
+          <span id="text-offset-value">0</span>km
+        </p>
+
+        <p
+          style="
+            color: rgb(216, 216, 216);
+            font-size: 40px;
+            font-weight: 600;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+          "
+        >
+          <span id="text-offset-calories">0</span>
+        </p>
+      </div>
+    </div>
+
+    <script>
+      // Function to calculate calories from distance in kilometers
+      function calculateCalories(distance) {
+        const caloriesPerKilometer = 62;
+        return (distance * caloriesPerKilometer).toFixed(2);
+      }
+    
+      const socket = io();
+      let lastBgOffsetValue = 0;
+      let lastTextOffsetValue = 0;
+    
+      // Initialize timerActive as true
+      let timerActive = true;
+      let serialData = 0;
+    
+      // Function to update values and stop when timerActive is false
+      function updateValues() {
+        if (timerActive) {
+          socket.on("bgOffset", (bgOffsetValue) => {
+            // Explicitly convert the received value to a number
+            const bgOffsetNumber = parseFloat(bgOffsetValue);
+            const adjustedValue = (bgOffsetNumber * 0.05).toFixed(2);
+            document.getElementById("bg-offset-value").textContent = adjustedValue;
+            lastBgOffsetValue = adjustedValue;
+    
+            // Calculate and display calories based on bgOffset
+            const calories = calculateCalories(bgOffsetNumber * 0.05);
+            document.getElementById("bg-offset-calories").textContent = calories;
+          });
+    
+          socket.on("textOffset", (textOffsetValue) => {
+            // Explicitly convert the received value to a number
+            const textOffsetNumber = parseFloat(textOffsetValue);
+            const adjustedValue = (textOffsetNumber * 0.05).toFixed(2);
+            document.getElementById("text-offset-value").textContent = adjustedValue;
+            lastTextOffsetValue = adjustedValue;
+    
+            // Calculate and display calories based on textOffset
+            const calories = calculateCalories(textOffsetNumber * 0.05);
+            document.getElementById("text-offset-calories").textContent = calories;
+          });
+        }
+      }
+    
+      // Check if timerActive is true before starting the timer
+      if (timerActive) {
+        updateValues();
+    
+        setTimeout(() => {
+          // Set timerActive to false when transitioning to greeting.ejs
+          timerActive = false;
+          serialData = 0;
+          // Remove the event listeners to stop further updates
+          socket.off("bgOffset");
+          socket.off("textOffset");
+        }, 1000); // Display the last received values at 40 seconds
+      }
+    
+      if (timerActive) {
+        setTimeout(() => {
+          socket.emit("serialEnd", "f");
+          location.href = "http://localhost:6660";
+          timerActive = false;
+        }, 10000);
+      }
+    </script>
+
+   
+
+
+
+  </body>
+</html>

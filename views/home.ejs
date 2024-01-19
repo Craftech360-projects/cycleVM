@@ -1,0 +1,424 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <script src="/assets/js/socket.io.min.js"></script>
+    <link rel="stylesheet" href="../assets/animate.css" />
+    <style>
+      @import url("../assets/fonts.googleapis.com");
+      * {
+        font-family: "Poppins", sans-serif;
+      }
+      body {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        overflow: hidden;
+        background-color: #000;
+        width: 100vw;
+        height: 100vh;
+        display: flex;
+        flex-direction: column-reverse;
+        /* justify-content: space-evenly; */
+        align-items: center;
+        font-family: "Courier New", Courier, monospace;
+      }
+
+      #form-container {
+        width: 100vw;
+        height: 100vh;
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        background: url(../assets/bg1.png);
+        background-size: cover;
+        background-repeat: no-repeat;
+      }
+
+      form {
+        width: 100vw;
+        height: 75vh;
+        display: flex;
+        justify-content: space-evenly;
+        align-items: end;
+      }
+      *:focus {
+        outline: none;
+      }
+
+      /* Style for input fields */
+
+      .input-field-one {
+        background-color: #329d987f;
+        width: 320px;
+        height: 100px;
+        border-radius: 25px;
+        border: none;
+        outline: none;
+        font-size: 44px;
+        padding: 0 35px;
+        color: rgb(197, 197, 197);
+        font-family: "Inter";
+        font-weight: 600;
+        font-style: Medium;
+      }
+
+      /* Style for the "Start" button */
+      .start-button {
+        width: 400px;
+        height: 200px;
+        padding: 20px;
+        /* background: linear-gradient(to left, #d39423, #ffdc60); */
+        /* box-shadow: 0 0 15px #ffdc60; */
+        /* color: #000; */
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        position: absolute;
+        top: 95%;
+        right: 1%;
+        font-size: larger;
+        font-weight: bolder;
+        text-transform: uppercase;
+        letter-spacing: 5px;
+        background: url(../assets/start.png);
+        background-size: contain;
+        background-repeat: no-repeat;
+        border: none;
+      }
+      #bottel {
+        display: flex;
+        justify-content: space-around;
+        align-items: center;
+        width: 100vw;
+        height: 70vh;
+        z-index: 1000;
+      }
+      #names {
+        position: absolute;
+        display: flex;
+        justify-content: space-evenly;
+        align-items: center;
+        width: 65vw;
+        height: 25vh;
+        z-index: 1000;
+        bottom: 0;
+        /* background-color: #b04c4c; */
+      }
+      #names h1 {
+        font-size: 35px;
+        color: aliceblue;
+        text-transform: capitalize;
+        text-shadow: 2px 2px #ffdc60;
+      }
+      #logo {
+        position: absolute;
+        top: 10px; /* Adjust as needed */
+        left: 10px; /* Adjust as needed */
+        z-index: 101; /* Ensures the logo is above the video */
+        width: 270px; /* Adjust as needed */
+        height: 150px; /* Keeps the aspect ratio of the logo */
+      }
+
+      /* #playerTwo {
+        margin: 0 200px 0 200px;
+      } */
+      #winner {
+        /* width: 100vw;
+        height: 100vh; */
+        font-size: 40px;
+        color: aliceblue;
+        text-transform: uppercase;
+        text-align: center;
+        background: url(../assets/bg1.png);
+        background-size: contain;
+        background-repeat: no-repeat;
+        display: flex;
+        align-items: flex-end;
+        justify-content: center;
+      }
+      #winner h1 {
+        /* color: #000; */
+        text-transform: capitalize;
+        font-size: 62px;
+        font-weight: bolder;
+        /* border: 6px solid #cd9f09; */
+        /* -webkit-text-stroke: 10px #cd9f09; */
+        /* margin-bottom: 350px; */
+      }
+
+      #gif {
+        width: 100vw;
+        height: 100vh;
+        position: absolute;
+        top: 0;
+        left: 0;
+        /* z-index: 90; */
+      }
+      #cong {
+        position: absolute;
+        top: 0;
+        left: 10px;
+        z-index: 2000;
+      }
+
+      #videos {
+        position: relative;
+        width: 100vw;
+        height: 100vh;
+        /* display: flex;
+        justify-content: space-around;
+        align-items: center; */
+      }
+      /* #bg1,
+      #bg2,
+      #bg3 {
+        width: 35%;
+        height: 80vh;
+        z-index: -100;
+      } */
+      #bg {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        display: block;
+      }
+
+      .video-wrapper {
+        width: 100%;
+        height: 100%;
+        /* background-color: blue; */
+        position: relative;
+      }
+
+      .overlay-video {
+        width: 100%; /* Adjusting for the gap */
+        height: 100%;
+        object-fit: cover;
+      }
+      .container {
+        position: absolute;
+        top: 300px;
+        width: 400px;
+        height: 200px;
+      }
+      .container h1 {
+        color: white;
+        font-size: 42px;
+        font-family: "Inter";
+        font-weight: 800;
+        /* font-style: bold; */
+        margin-top: -10px;
+        margin-left: 25px;
+      }
+      input::placeholder {
+        font-size: 38px;
+      }
+      .logo1 {
+        width: 100%;
+        position: absolute;
+        top: -300px;
+        left: -650px;
+      }
+      #winner img {
+        /* width: 250px; /* Adjust as needed */
+        /* height: 150px;  */
+      }
+
+      #winner {
+        position: absolute;
+        width: 100%;
+        height: 100%;
+      }
+
+      #bg {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        position: absolute;
+        top: 0;
+        left: 0;
+        z-index: -1;
+      }
+      .congrats-content {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        text-align: center;
+        color: white;
+      }
+
+      .congrats-content h1 {
+        font-size: 3rem;
+        margin-bottom: 10px;
+      }
+
+      .congrats-content h2 {
+        font-size: 2rem;
+      }
+
+      .congrats-content p {
+        font-size: 1.5rem;
+        margin-top: 10px;
+      }
+
+      .logo2 {
+        width: 320px;
+        height: 200px;
+      }
+      .gif {
+        width: 100vw;
+        height: 100vh;
+      }
+      .gif video {
+        width: 100%;
+        height: 100%;
+      }
+    </style>
+  </head>
+  <body>
+    <!-- form for entering players name -->
+    <!-- <div class="" id="form-container">
+      <form id="usernameForm">
+        <div class="container">
+          <div class="logo1">
+            <img src="../assets/logo.png" alt="Logo" id="logo" />
+          </div>
+          <h1>Enter Your Name</h1>
+          <input
+            type="text"
+            id="username1"
+            class="input-field-one animate__animated animate__bounceInDown"
+            required
+            placeholder="Enter Your Name"
+          />
+
+          <button
+            type="button"
+            class="start-button animate__animated animate__fadeInUpBig"
+            onclick="sendUsernames()"
+          ></button>
+        </div>
+      </form>
+    </div> -->
+
+    <!-- names  -->
+    <section id="names" style="display: none">
+      <h1 id="playerOne">player One</h1>
+    </section>
+
+    <!-- bottels  -->
+    <section id="videos">
+      <!-- <img src="../assets/bg4.png" alt="" id="bg" /> -->
+      <div class="video-wrapper">
+        <img src="../assets/logo.png" alt="Logo" id="logo" />
+
+        <video
+          class="overlay-video"
+          src="../assets/waves.mp4"
+          muted
+          preload
+          id="bg1"
+        ></video>
+      </div>
+    </section>
+
+    <!-- winner name  -->
+    <!-- winner name  -->
+    <section id="winner" style="display: none">
+      <div class="gif">
+        <!-- <img src="../assets/confit.mp4" id="gif" alt="" /> -->
+        <video src="../assets/newconff.gif" muted autoplay id="gif"></video>
+      </div>
+      <div class="logo2">
+        <img src="../assets/logo.png" alt="Logo" id="logo" />
+      </div>
+
+      <!-- <img src="../assets/bg_congrats.jpg" id="bg" alt="" /> -->
+      <div class="congrats-content">
+        <h1>Congratulations</h1>
+        <h2 id="winnername" class="animate__animated animate__bounceInUp">
+          Player Name
+        </h2>
+        <p>On completing the task</p>
+      </div>
+    </section>
+
+    <script>
+      var count = 0;
+      var topPosition = 1;
+      const video1 = document.getElementById("bg1");
+      const secondsToAdd = 1;
+      var winnerName;
+
+      const socket = io();
+      socket.on("connection");
+
+      const form = document.getElementById("form-container");
+      const bottels = document.getElementById("bottel");
+
+      function sendUsernames() {
+        const one = document.getElementById("username1").value;
+        socket.emit("saveNamesAndInitializeWinner", [one]);
+      }
+
+      socket.on("userSaved", (e) => {
+        console.log("userName", e);
+        document.getElementById("playerOne").innerHTML = e.userName;
+        winnerName = e.userName;
+        document.getElementById("videos").style.display = "flex";
+        document.getElementById("names").style.display = "none";
+      });
+
+      let winnerSocket = null;
+      const bgVector = document.getElementById("bgVector");
+      // one
+
+      socket.on("bgOffset", (data) => {
+        console.log("data",data);
+        video1.currentTime = data;
+        if (data > 11 && !winnerSocket) {
+          navigateToWinnerPage();
+        }
+      });
+
+      // // two
+      // socket.on("textOffset", (data) => {
+      //   video2.currentTime = data;
+      //   if (data > 90 && !winnerSocket) {
+      //     navigateToWinnerPage();
+      //   }
+      // });
+
+      // // three
+      // socket.on("numberOffset", (data) => {
+      //   video3.currentTime = data;
+
+      //   if (data > 90 && !winnerSocket) {
+      //     const three = document.getElementById("playerThree").innerHTML;
+      //     navigateToWinnerPage(three);
+      //   }
+      // });
+
+      function navigateToWinnerPage() {
+        document.getElementById("names").style.display = "none";
+        document.getElementById("videos").style.display = "none";
+        socket.emit("serialEnd");
+        document.getElementById("winner").style.display = "flex";
+        document.getElementById("winnername").innerHTML = winnerName;
+        socket.emit("winner", winnerName);
+        var timer = 20;
+        var cleartime = setInterval(function () {
+          timer--;
+          if (timer == 0) {
+            clearInterval(cleartime);
+            location.reload();
+          }
+        }, 500);
+      }
+    </script>
+  </body>
+</html>

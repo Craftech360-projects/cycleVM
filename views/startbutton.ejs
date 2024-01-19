@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script src="/assets/js/socket.io.min.js"></script>
+    <style>
+
+*{
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+body {
+background-image: url(../assets/uploads/bg.png);
+width: 100vw;
+height: 100vh;
+background-repeat: no-repeat;
+}
+h1 {
+color: white;
+font-size: 64px;
+font-family: "Inter";
+font-weight: 800;
+font-style: bold;
+margin-bottom: 40px;
+}
+
+.container {
+display: flex;
+align-items: center;
+justify-content: center;
+height: 100vh;
+flex-direction: column;
+}
+input {
+background-color: #329d987f;
+width: 535px;
+height: 113px;
+border-radius: 25px;
+border: none;
+outline: none;
+font-size: 44px;
+padding: 0 35px;
+color: rgb(197, 197, 197);
+font-family: "Inter";
+font-weight: 600;
+font-style: Medium;
+}
+
+button {
+background-color: transparent;
+box-shadow: none;
+border: none;
+margin-top: 40px;
+width: 535px;
+}
+
+@font-face {
+font-family: "Inter";
+src: url("/fonts/Inter-Bold.ttf") format("truetype");
+font-weight: 800;
+font-style: bold;
+}
+
+@font-face {
+font-family: "Inter";
+src: url("/fonts/Inter-Bold.ttf") format("truetype");
+font-weight: 700;
+font-style: bold;
+}
+
+@font-face {
+font-family: "Inter";
+src: url("/fonts/Inter-SemiBold.ttf") format("truetype");
+font-weight: 600;
+font-style: normal;
+}
+
+@font-face {
+font-family: "Inter";
+src: url("/fonts/Inter-Medium.ttf") format("truetype");
+font-weight: 600;
+font-style: Medium;
+}
+    </style>
+    <title>start</title>
+  </head>
+  <body>
+    <!-- <img src="../assets/BG.png" alt=""> -->
+    <!-- <div class="form-container"> -->
+      <!-- <form id="usernameForm">
+        <input
+          type="text"
+          id="username1"
+          class="input-field"
+          required
+          placeholder="player-one"
+        /><br />
+
+      </form> -->
+      <button type="button" class="start-button" onclick="sendUsernames()">
+        Start
+      </button>
+    </div>
+
+    <script>
+      const socket = io();
+      // socket.emit('saveNamesAndInitializeWinner',['Name1', 'Name2', 'Name3']);
+      function sendUsernames(){
+        const one = document.getElementById('username1').value;
+        const two = document.getElementById('username2').value;
+        const three = document.getElementById('username3').value;
+        socket.emit('saveNamesAndInitializeWinner',[one,two,three]);
+        console.log(one,two,three)
+      }
+      socket.on("redirect", (destination) => {
+        window.location.href = destination; // Redirect to the specified destination
+      });
+    </script>
+  </body>
+</html>

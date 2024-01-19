@@ -1,0 +1,182 @@
+<!-- ipad.html -->
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <!-- <meta name="viewport" content="width=device-width, initial-scale=1.0" /> -->
+    <title>Document</title>
+    <script src="/assets/js/socket.io.min.js"></script>
+    <!-- Include necessary meta tags, styles, and scripts -->
+  </head>
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      overflow: hidden;
+      background-color: #000;
+      width: 100vw;
+      height: 100vh;
+      background: url(../assets/bg1.png);
+      background-repeat: no-repeat;
+      background-size: cover;
+      display: flex;
+      flex-direction: column-reverse;
+      /* justify-content: space-evenly; */
+      align-items: center;
+      font-family: "Courier New", Courier, monospace;
+    }
+    form {
+      width: 100vw;
+      height: 75vh;
+      display: flex;
+      justify-content: space-evenly;
+      align-items: end;
+    }
+    *:focus {
+      outline: none;
+    }
+    .input-field-one {
+      background-color: #329d987f;
+      width: 320px;
+      height: 100px;
+      border-radius: 25px;
+      border: none;
+      outline: none;
+      font-size: 44px;
+      padding: 0 35px;
+      color: rgb(197, 197, 197);
+      font-family: "Inter";
+      font-weight: 600;
+      font-style: Medium;
+    }
+    .start-button {
+      width: 400px;
+      height: 200px;
+      padding: 20px;
+      /* background: linear-gradient(to left, #d39423, #ffdc60); */
+      /* box-shadow: 0 0 15px #ffdc60; */
+      /* color: #000; */
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      position: absolute;
+      top: 95%;
+      right: 1%;
+      font-size: larger;
+      font-weight: bolder;
+      text-transform: uppercase;
+      letter-spacing: 5px;
+      background: url(../assets/start.png);
+      background-size: contain;
+      background-repeat: no-repeat;
+      border: none;
+    }
+    #names {
+      position: absolute;
+      display: flex;
+      justify-content: space-evenly;
+      align-items: center;
+      width: 65vw;
+      height: 25vh;
+      z-index: 1000;
+      bottom: 0;
+      /* background-color: #b04c4c; */
+    }
+    #names h1 {
+      font-size: 35px;
+      color: aliceblue;
+      text-transform: capitalize;
+      text-shadow: 2px 2px #ffdc60;
+    }
+
+    .formInput h1 {
+      color: white;
+      font-size: 42px;
+      font-family: "Inter";
+      font-weight: 800;
+      margin-left: 40px;
+      /* font-style: bold; */
+    }
+
+    .formInput {
+      position: absolute;
+      top: 380px;
+      width: 400px;
+      height: 250px;
+    }
+
+    .logo1 {
+      width: 260px;
+      height: 150px;
+      position: absolute;
+      top: 10px;
+      left: 20px;
+    }
+    #logo {
+      width: 100%;
+      height: 100%;
+    }
+   
+  </style>
+  <body>
+    <!-- form for entering players name -->
+    <div class="main" id="form-container">
+      <form id="usernameForm">
+        <div class="container-logo">
+          <div class="logo1">
+            <img src="../assets/logo.png" alt="Logo" id="logo" />
+          </div>
+        </div>
+        <div class="formInput">
+          <div class="heading">
+            <h1>Enter Your Name</h1>
+          </div>
+          <div>
+            <input
+              type="text"
+              id="username1"
+              class="input-field-one animate__animated animate__bounceInDown"
+              required
+              placeholder=""
+            />
+          </div>
+          <div>
+            <button
+              type="button"
+              class="start-button animate__animated animate__fadeInUpBig"
+              onclick="sendUsernames()"
+            ></button>
+          </div>
+        </div>
+      </form>
+    </div>
+
+    <!-- <section id="names" style="display: none">
+      <h1 id="playerOne">player One</h1>
+    </section> -->
+  </body>
+  <script>
+    const form = document.getElementById("form-container");
+    const socket = io();
+    socket.on("connection");
+
+    function sendUsernames() {
+      const userName = document.getElementById("username1").value;
+      console.log("button clicked", userName);
+      location.reload()
+      socket.emit("saveNamesAndInitializeWinner", userName);
+      //   const one = document.getElementById("username1").value;
+      //   socket.emit("saveNamesAndInitializeWinner", [one]);
+      //   socket.on("userSaved", (e) => {
+      //     document.getElementById("playerOne").innerHTML = e.users[0];
+      //     form.style.display = "none";
+      //     document.getElementById("names").style.display = "none";
+      //     socket.emit("startData",)
+      //     window.location.href = "/home";
+      //   });
+    }
+
+    // Your existing JavaScript code related to entering names and starting
+  </script>
+</html>
