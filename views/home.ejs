@@ -366,6 +366,18 @@
 
       const socket = io();
       socket.on("connection");
+      document.addEventListener("keydown", function (event) {
+    // Check if the pressed key is "f"
+    if (event.shiftKey && event.key === 'F') {
+      // Emit the "command" event to the server with the "f" key
+      socket.emit("command", { key: 'Shift + F' });
+      
+      // Log that the "f" key was pressed (optional)
+      console.log('Sent letter "f" to ESP');
+    }
+    location.reload()
+  
+  });
 
       const form = document.getElementById("form-container");
       const bottels = document.getElementById("bottel");
