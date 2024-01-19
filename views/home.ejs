@@ -269,13 +269,21 @@
         width: 320px;
         height: 200px;
       }
-      .gif {
+      /* .gif {
         width: 100vw;
         height: 100vh;
       }
       .gif video {
         width: 100%;
         height: 100%;
+      } */
+      #gif {
+        width: 100vw;
+        height: 100vh;
+        position: absolute;
+        top: 0;
+        left: 0;
+        z-index: 1000;
       }
     </style>
   </head>
@@ -331,7 +339,9 @@
     <section id="winner" style="display: none">
       <div class="gif">
         <!-- <img src="../assets/confit.mp4" id="gif" alt="" /> -->
-        <video src="../assets/newconff.gif" muted autoplay id="gif"></video>
+        <img src="../assets/confiti.gif" id="gif" alt="" />
+
+        <!-- <video src="../assets/newconff.gif" muted autoplay id="gif"></video> -->
       </div>
       <div class="logo2">
         <img src="../assets/logo.png" alt="Logo" id="logo" />
